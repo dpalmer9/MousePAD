@@ -65,3 +65,18 @@ class FileTable(Qtw.QWidget):
     def add_row(self):
         table_rows = self.filetable.rowCount()
         self.filetable.insertRow(table_rows)
+
+    def add_cols(self,num_cols,col_labels,col_spaces=''):
+        self.filetable.setColumnCount(num_cols)
+        col_headers = ['Behaviour File Path','Photometry File Path']
+        col_headers = col_headers.append(col_labels)
+        self.filetable.setHorizontalHeaderLabels(col_headers)
+        if col_spaces != '':
+            if len(col_spaces) == 1:
+                for col in range(2,(2+num_cols)):
+                    self.filetable.horizontalHeader().resizeSection(col, col_spaces)
+            elif len(col_spaces) == num_cols:
+                for col in range(2,(2+num_cols)):
+                    index = col-2
+                    self.filetable.horizontalHeader().resizeSection(col, col_spaces[index])
+

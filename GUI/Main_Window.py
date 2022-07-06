@@ -19,6 +19,12 @@ class MainWindow(Qtw.QMainWindow):
         self.height = 600
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setWindowTitle(self.title)
+        self.menu = self.menuBar()
+        self.filemenu = Qtw.QMenu('File',self)
+        self.filemenu.addAction('Load Session')
+        self.filemenu.addAction('Save Session')
+        self.filemenu.addAction('Exit')
+        self.menu.addMenu(self.filemenu)
         #self.filetable = FileTable(self)
         #self.filetable.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.Minimum)
         self.maintab = MainTab(self)
