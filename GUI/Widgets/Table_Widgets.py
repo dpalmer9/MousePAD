@@ -66,10 +66,12 @@ class FileTable(Qtw.QWidget):
         table_rows = self.filetable.rowCount()
         self.filetable.insertRow(table_rows)
 
-    def add_cols(self,num_cols,col_labels,col_spaces=''):
-        self.filetable.setColumnCount(num_cols)
+    def add_cols(self,num_cols,col_labels,col_widget,col_spaces=''):
+        print('it tried')
+        self.filetable.setColumnCount((num_cols + 2))
         col_headers = ['Behaviour File Path','Photometry File Path']
-        col_headers = col_headers.append(col_labels)
+        col_headers = col_headers + col_labels
+        print(col_headers)
         self.filetable.setHorizontalHeaderLabels(col_headers)
         if col_spaces != '':
             if len(col_spaces) == 1:
@@ -79,4 +81,10 @@ class FileTable(Qtw.QWidget):
                 for col in range(2,(2+num_cols)):
                     index = col-2
                     self.filetable.horizontalHeader().resizeSection(col, col_spaces[index])
+        for col in range(2,(2+num_cols)):
+            widget_index = col-2
+            if col_widget[widget_index] == 'combobox':
+                print('got to if')
+                self.filetable.setCellWidget(0,col,Qtw.QComboBox())
+        print('should work!')
 

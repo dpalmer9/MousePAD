@@ -1,6 +1,7 @@
 import PyQt5.QtWidgets as Qtw
 from GUI.Widgets.Table_Widgets import FileTable
-
+from Processing.Photometry import TableUpdate as TUP
+from Processing.Behaviour import TableUpdate as TUB
 
 class FilePairTab(Qtw.QWidget):
 
@@ -41,6 +42,7 @@ class FilePairTab(Qtw.QWidget):
 
         self.neuraldata_combo = Qtw.QComboBox(self.typewid)
         self.neuraldata_combo.addItems(['','Doric Photometry Data'])
+        self.neuraldata_combo.currentIndexChanged.connect(self.neuraldata_combo_changed)
 
         self.typehlayout.addWidget(self.behav_label)
         self.typehlayout.addWidget(self.behav_combo)
@@ -64,6 +66,14 @@ class FilePairTab(Qtw.QWidget):
         self.vlayout.addWidget(self.filetab)
 
         self.layout = self.vlayout
+
+    def neuraldata_combo_changed(self,i):
+        self.current_neuraldata = self.neuraldata_combo.currentText()
+
+        if self.current_neuraldata == 'Doric Photometry Data':
+            new_col_dict = TUP.table_update(self.current_neuraldata)
+            self.filetab.add_cols(num_cols=new_col_dict['num_col'],col_labels = new_col_dict['col_label'],
+                                  col_widget=new_col_dict['col_type'],col_spaces=new_col_dict['col_space'])
 
 
 
