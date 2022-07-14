@@ -11,7 +11,7 @@ class BehaviourData:
     def __init__(self, path):
         self.trial_definition_times = None
         self.event_name = None
-        self.abet_event_times = None
+        self.event_times = None
         self.curr_dir = os.getcwd()
         if sys.platform == 'linux' or sys.platform == 'darwin':
             self.folder_symbol = '/'
@@ -19,14 +19,6 @@ class BehaviourData:
             self.folder_symbol = '\\'
         self.main_folder_path = os.getcwd()
         self.data_folder_path = self.main_folder_path + self.folder_symbol + 'Data' + self.folder_symbol
-
-        self.abet_file_path = ''
-        self.abet_file = ''
-
-        self.abet_loaded = False
-        self.abet_searched = False
-
-        self.abet_doric_sync_value = 0
 
         self.extra_prior = 0
         self.extra_follow = 0
@@ -38,7 +30,6 @@ class BehaviourData:
         event_time_colname = ['Evnt_Time', 'Event_Time']
         colnames_found = False
         for row in abet_csv_reader:
-            # yield [unicode(cell, 'utf-8') for cell in row]
             if not colnames_found:
                 if len(row) == 0:
                     continue
@@ -61,7 +52,7 @@ class BehaviourData:
                 abet_data_list.append([row[0], row[1], row[2], row[3], row[5], row[8]])
         abet_file.close()
         abet_numpy = np.array(abet_data_list)
-        self.abet_pandas = pd.DataFrame(data=abet_numpy, columns=abet_name_list)
+        self.main_dataset = pd.DataFrame(data=abet_numpy, columns=abet_name_list)
 
     def search_event(self, start_event_id='1', start_event_group='', start_event_item_name='',
                      start_event_position=None, filter_list=None, extra_prior_time=0, extra_follow_time=0,
@@ -133,31 +124,29 @@ class BehaviourData:
         touch_event_names = ['Touch Up Event', 'Touch Down Event', 'Whisker - Clear Image by Position']
 
         if start_event_id in touch_event_names:
-            filtered_abet = self.abet_pandas.loc[(self.abet_pandas[self.event_name_col] == str(start_event_id)) &
-                                                 (self.abet_pandas['Group_ID'] == str(start_event_group)) &
-                                                 (self.abet_pandas['Item_Name'] == str(start_event_item_name)) &
-                                                 (self.abet_pandas['Arg1_Value'] == str(start_event_position)), :]
+            filtered_abet = self.main_dataset.loc[(self.main_dataset[self.event_name_col] == str(start_event_id)) &
+                                                  (self.main_dataset['Group_ID'] == str(start_event_group)) &
+                                                  (self.main_dataset['Item_Name'] == str(start_event_item_name)) &
+                                                  (self.main_dataset['Arg1_Value'] == str(start_event_position)), :]
 
         else:
-            filtered_abet = self.abet_pandas.loc[(self.abet_pandas[self.event_name_col] == str(start_event_id)) & (
-                    self.abet_pandas['Group_ID'] == str(start_event_group)) &
-                                                 (self.abet_pandas['Item_Name'] == str(start_event_item_name)), :]
+            filtered_abet = self.main_dataset.loc[(self.main_dataset[self.event_name_col] == str(start_event_id)) & (
+                    self.main_dataset['Group_ID'] == str(start_event_group)) &
+                                                 (self.main_dataset['Item_Name'] == str(start_event_item_name)), :]
 
-        self.abet_event_times = filtered_abet.loc[:, self.time_var_name]
-        self.abet_event_times = self.abet_event_times.reset_index(drop=True)
-        self.abet_event_times = pd.to_numeric(self.abet_event_times, errors='coerce')
+        self.event_times = filtered_abet.loc[:, self.time_var_name]
+        self.event_times = self.event_times.reset_index(drop=True)
+        self.event_times = pd.to_numeric(self.event_times, errors='coerce')
 
         if filter_event:
             for fil in filter_list:
-                self.abet_event_times = filter_event(self.abet_event_times, self.abet_pandas,
-                                                     str(fil['Type']), str(fil['Name']),
-                                                     str(fil['Group']), str(fil['Arg']),
-                                                     str(fil['Prior']))
+                self.event_times = filter_event(self.event_times, self.main_dataset, str(fil['Type']), str(fil['Name']),
+                                                str(fil['Group']), str(fil['Arg']), str(fil['Prior']))
 
-        abet_start_times = self.abet_event_times - extra_prior_time
-        abet_end_times = self.abet_event_times + extra_follow_time
-        self.abet_event_times = pd.concat([abet_start_times, abet_end_times], axis=1)
-        self.abet_event_times.columns = ['Start_Time', 'End_Time']
+        abet_start_times = self.event_times - extra_prior_time
+        abet_end_times = self.event_times + extra_follow_time
+        self.event_times = pd.concat([abet_start_times, abet_end_times], axis=1)
+        self.event_times.columns = ['Start_Time', 'End_Time']
         self.event_name = start_event_item_name
         self.extra_follow = extra_follow_time
         self.extra_prior = extra_prior_time
@@ -169,7 +158,7 @@ class BehaviourData:
             return "End Event not in list"
 
         event_group_list = start_event_group + end_event_group
-        filtered_abet = self.abet_pandas[self.abet_pandas.Item_Name.isin(event_group_list)]
+        filtered_abet = self.main_dataset[self.main_dataset.Item_Name.isin(event_group_list)]
         filtered_abet = filtered_abet.reset_index(drop=True)
         if filtered_abet.iloc[0, 3] not in start_event_group:
             filtered_abet = filtered_abet.drop([0])  # OCCURS IF FIRST INSTANCE IS THE END OF A TRIAL (COMMON WITH ITI)
