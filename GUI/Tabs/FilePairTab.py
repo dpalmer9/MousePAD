@@ -52,7 +52,9 @@ class FilePairTab(Qtw.QWidget):
         # Table Buttons
 
         self.table_addrow_button = Qtw.QPushButton('Add Row',self.table_button_wid)
+        self.table_addrow_button.clicked.connect(self.add_row)
         self.table_removerow_button = Qtw.QPushButton('Remove Row',self.table_button_wid)
+        self.table_removerow_button.clicked.connect(self.remove_row)
         self.table_button_layout.addWidget(self.table_addrow_button)
         self.table_button_layout.addWidget(self.table_removerow_button)
 
@@ -66,6 +68,12 @@ class FilePairTab(Qtw.QWidget):
         self.vlayout.addWidget(self.filetab)
 
         self.layout = self.vlayout
+
+    def add_row(self):
+        self.filetab.add_row()
+
+    def remove_row(self):
+        self.filetab.remove_row()
 
     def neuraldata_combo_changed(self,i):
         self.current_neuraldata = self.neuraldata_combo.currentText()
