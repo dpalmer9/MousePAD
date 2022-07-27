@@ -10,6 +10,10 @@ from Processing.Photometry import Filters
 
 class NeuralData:
     def __init__(self, path):
+        self.ttl_name = None
+        self.act_name = None
+        self.iso_name = None
+        self.time_name = None
         self.data_act = None
         self.data_iso = None
         self.time_data = None
@@ -35,13 +39,20 @@ class NeuralData:
         self.main_dataset = self.main_dataset.astype('float')
 
     def select_cols(self, time_name, iso_name, act_name, ttl_name):
-        self.condensed_dataset = self.main_dataset[[time_name, iso_name, act_name, ttl_name]]
-        self.time_data = self.condensed_dataset[[time_name]]
-        self.data_iso = self.condensed_dataset[[iso_name]]
-        self.data_act = self.condensed_dataset[[act_name]]
+        self.time_name = time_name
+        self.iso_name = iso_name
+        self.act_name = act_name
+        self.ttl_name = ttl_name
+        self.condensed_dataset = self.main_dataset[[self.time_name, self.iso_name, self.act_name, self.ttl_name]]
 
     def report_cols(self):
         return self.main_dataset.columns
+
+    def time_sync(self,sync_value):
+        self.condensed_dataset[self.time_name] = self.condensed_dataset[self.time_name] - sync_value
+
+    def cut_negative_time(self):
+        self.condensed_dataset = self.condensed_dataset[self.condensed_dataset[self.time_name] >= 0]
 
     def filter_data(self, filter_type, order, **kwargs):
         if filter_type == 'butterworth':
