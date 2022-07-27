@@ -1,6 +1,8 @@
 # Import
 from scipy import signal
 
+# Butterworth Filter
+
 
 def butterworth(time_data, data_iso, data_act, order, filter_freq, filt_type='lowpass', analog=False):
     sample_freq = len(time_data) / (time_data[(len(time_data) - 1)] - time_data[0])
@@ -9,6 +11,8 @@ def butterworth(time_data, data_iso, data_act, order, filter_freq, filt_type='lo
     fil_iso = signal.sosfilt(butter_filter, data_iso)
     fil_act = signal.sosfilt(butter_filter, data_act)
     return fil_iso, fil_act
+
+# Chebychev Type I Filter
 
 
 def chebychev_i(time_data, data_iso, data_act, order, ripple, filter_freq, filt_type='lowpass', analog=False):
@@ -19,6 +23,8 @@ def chebychev_i(time_data, data_iso, data_act, order, ripple, filter_freq, filt_
     fil_act = signal.sosfilt(chebyi_filter, data_act)
     return fil_iso, fil_act
 
+# Chebychev Type II Filter
+
 
 def chebychev_ii(time_data, data_iso, data_act, order, attenuation, filter_freq, filt_type='lowpass', analog=False):
     sample_freq = len(time_data) / (time_data[(len(time_data) - 1)] - time_data[0])
@@ -27,6 +33,8 @@ def chebychev_ii(time_data, data_iso, data_act, order, attenuation, filter_freq,
     fil_iso = signal.sosfilt(chebyii_filter, data_iso)
     fil_act = signal.sosfilt(chebyii_filter, data_act)
     return fil_iso, fil_act
+
+# Bessel Filter
 
 
 def bessel(time_data, data_iso, data_act, order, filter_freq, filt_type='lowpass', analog=False):
@@ -37,6 +45,8 @@ def bessel(time_data, data_iso, data_act, order, filter_freq, filt_type='lowpass
     fil_act = signal.sosfilt(bessel_filter, data_act)
     return fil_iso, fil_act
 
+# Elliptic Filter
+
 
 def elliptic(time_data, data_iso, data_act, order, ripple, attenuation, filter_freq, filt_type='lowpass', analog=False):
     sample_freq = len(time_data) / (time_data[(len(time_data) - 1)] - time_data[0])
@@ -44,4 +54,16 @@ def elliptic(time_data, data_iso, data_act, order, ripple, attenuation, filter_f
                                 output='sos', fs=sample_freq)
     fil_iso = signal.sosfilt(ellip_filter, data_iso)
     fil_act = signal.sosfilt(ellip_filter, data_act)
+    return fil_iso, fil_act
+
+# Savitsky-Golay Filter
+
+
+def savitsky_golay(time_data, data_iso, data_act, polyorder):
+    sample_freq = len(time_data) / (time_data[(len(time_data) - 1)] - time_data[0])
+    window_length = int(round(sample_freq) / 10)
+
+    fil_iso = signal.savgol_filter(data_iso, window_length, polyorder)
+    fil_act = signal.savgol_filter(data_act, window_length, polyorder)
+
     return fil_iso, fil_act
