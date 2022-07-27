@@ -82,6 +82,8 @@ class FilePairTab(Qtw.QWidget):
             new_col_dict = TUP.table_update(self.current_neuraldata)
             self.filetab.add_cols(num_cols=new_col_dict['num_col'],col_labels = new_col_dict['col_label'],
                                   col_widget=new_col_dict['col_type'],col_spaces=new_col_dict['col_space'])
+        elif self.current_neuraldata == '':
+            self.filetab.reset_cols()
 
 
 

@@ -17,6 +17,7 @@ class FileCell(Qtw.QWidget):
         self.text_widget = Qtw.QLineEdit(self)
         self.text_widget.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding, Qtw.QSizePolicy.Fixed)
         self.text_widget.resize(280, 30)
+        #self.text_widget.connect.textChanged()
 
         self.button_widget = Qtw.QPushButton('...', self)
         self.button_widget.clicked.connect(self.set_file_prompt)
@@ -38,6 +39,9 @@ class FileCell(Qtw.QWidget):
     def get_filepath(self):
         file_string = str(self.text_widget.displayText())
         return file_string
+
+    #def filepath_updated(self,string):
+
 
 
 # Table
@@ -109,4 +113,9 @@ class FileTable(Qtw.QWidget):
             widget_index = col-2
             if col_widget[widget_index] == 'combobox':
                 self.filetable.setCellWidget(0,col,Qtw.QComboBox())
+
+    def reset_cols(self):
+        self.filetable.setColumnCount(2)
+        col_headers = ['Behaviour File Path', 'Photometry File Path']
+        self.filetable.setHorizontalHeaderLabels(col_headers)
 
