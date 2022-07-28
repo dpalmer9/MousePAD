@@ -48,15 +48,50 @@ class NeuralData:
     def report_cols(self):
         return self.main_dataset.columns
 
-    def time_sync(self,sync_value):
+    def time_sync(self, sync_value):
         self.condensed_dataset[self.time_name] = self.condensed_dataset[self.time_name] - sync_value
 
     def cut_negative_time(self):
         self.condensed_dataset = self.condensed_dataset[self.condensed_dataset[self.time_name] >= 0]
 
-    def filter_data(self, filter_type, order, **kwargs):
+    def filter_data(self, filter_type, **kwargs):
+        self.data_iso = self.condensed_dataset[self.iso_name]
+        self.data_act = self.condensed_dataset[self.act_name]
         if filter_type == 'butterworth':
             self.data_iso, self.data_act = Filters.butterworth(time_data=self.time_data, data_iso=self.data_iso,
-                                                               data_act=self.data_act, order=order,
+                                                               data_act=self.data_act, order=kwargs['order'],
                                                                filter_freq=kwargs['filter_freq'],
                                                                filt_type=kwargs['filt_type'], analog=kwargs['analog'])
+
+        if filter_type == 'chebychev_i':
+            self.data_iso, self.data_act = Filters.chebychev_i(time_data=self.time_data, data_iso=self.data_iso,
+                                                               data_act=self.data_act, order=kwargs['order'],
+                                                               ripple=kwargs['ripple'],
+                                                               filter_freq=kwargs['filter_freq'],
+                                                               filt_type=kwargs['filt_type'], analog=kwargs['analog'])
+
+        if filter_type == 'chebychev_ii':
+            self.data_iso, self.data_act = Filters.chebychev_ii(time_data=self.time_data, data_iso=self.data_iso,
+                                                                data_act=self.data_act, order=kwargs['order'],
+                                                                attenuation=kwargs['attenuation'],
+                                                                filter_freq=kwargs['filter_freq'],
+                                                                filt_type=kwargs['filt_type'], analog=kwargs['analog'])
+
+        if filter_type == 'bessel':
+            self.data_iso, self.data_act = Filters.bessel(time_data=self.time_data, data_iso=self.data_iso,
+                                                          data_act=self.data_act, order=kwargs['order'],
+                                                          filter_freq=kwargs['filter_freq'],
+                                                          filt_type=kwargs['filt_type'], analog=kwargs['analog'])
+
+        if filter_type == 'elliptic':
+            self.data_iso, self.data_act = Filters.elliptic(time_data=self.time_data, data_iso=self.data_iso,
+                                                            data_act=self.data_act, order=kwargs['order'],
+                                                            ripple=kwargs['ripple'], attenuation=kwargs['attenuation'],
+                                                            filter_freq=kwargs['filter_freq'],
+                                                            filt_type=kwargs['filt_type'], analog=kwargs['analog'])
+        if filter_type == 'savitsky_golay':
+            self.data_iso, self.data_act = Filters.savitsky_golay(time_data=self.time_data, data_iso=self.data_iso,
+                                                                  data_act=self.data_act,polyorder=kwargs['polyorder'])
+
+        self.condensed_dataset[self.iso_name] = self.data_iso
+        self.condensed_dataset[self.act_name] = self.data_act
