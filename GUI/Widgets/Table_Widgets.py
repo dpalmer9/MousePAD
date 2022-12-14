@@ -1,39 +1,39 @@
 # Imports
-import PyQt5.QtWidgets as Qtw
+import PySide6.QtWidgets as QtWidgets
 import numpy as np
 import pandas as pd
 
 # Fil
 
 # File Cell
-class FileCell(Qtw.QWidget):
+class FileCell(QtWidgets.QWidget):
 
     def __init__(self, parent, row_index, col_index):
         super(FileCell, self).__init__(parent)
 
-        self.hlayout = Qtw.QHBoxLayout(self)
+        self.hlayout = QtWidgets.QHBoxLayout(self)
         self.hlayout.setContentsMargins(5, 0, 5, 0)
 
-        self.text_widget = Qtw.QLineEdit(self)
-        self.text_widget.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding, Qtw.QSizePolicy.Fixed)
+        self.text_widget = QtWidgets.QLineEdit(self)
+        self.text_widget.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         self.text_widget.resize(280, 30)
         #self.text_widget.connect.textChanged()
 
-        self.button_widget = Qtw.QPushButton('...', self)
+        self.button_widget = QtWidgets.QPushButton('...', self)
         self.button_widget.clicked.connect(self.set_file_prompt)
-        self.button_widget.setSizePolicy(Qtw.QSizePolicy.Fixed, Qtw.QSizePolicy.Fixed)
+        self.button_widget.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.button_widget.resize(10, 30)
 
         self.hlayout.addWidget(self.text_widget)
         self.hlayout.addWidget(self.button_widget)
 
-        self.setSizePolicy(Qtw.QSizePolicy.Fixed, Qtw.QSizePolicy.Fixed)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
         self.row_index = row_index
         self.col_index = col_index
 
     def set_file_prompt(self):
-        file_name = Qtw.QFileDialog.getOpenFileName(self, 'Open File', 'C:\\')
+        file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', 'C:\\')
         self.text_widget.setText(str(file_name[0]))
 
     def get_filepath(self):
@@ -47,16 +47,16 @@ class FileCell(Qtw.QWidget):
 # Table
 
 
-class FileTable(Qtw.QWidget):
+class FileTable(QtWidgets.QWidget):
 
     def __init__(self,*args,**kwargs):
         super(FileTable, self).__init__(*args,**kwargs)
 
         # Layout #
-        self.vlayout = Qtw.QVBoxLayout(self)
+        self.vlayout = QtWidgets.QVBoxLayout(self)
 
         # Table Widget
-        self.filetable = Qtw.QTableWidget()
+        self.filetable = QtWidgets.QTableWidget()
         self.filetable.setRowCount(1)
         self.filetable.setColumnCount(2)
         self.filetable.setHorizontalHeaderLabels(['Behaviour File Path',
@@ -87,7 +87,7 @@ class FileTable(Qtw.QWidget):
             if wid == 'FileCell':
                 self.filetable.setCellWidget(table_rows, col_index, FileCell(self, table_rows, col_index))
             if wid == 'combobox':
-                self.filetable.setCellWidget(table_rows, col_index, Qtw.QComboBox())
+                self.filetable.setCellWidget(table_rows, col_index, QtWidgets.QComboBox())
             col_index += 1
 
     def remove_row(self):
@@ -112,7 +112,7 @@ class FileTable(Qtw.QWidget):
         for col in range(2,(2+num_cols)):
             widget_index = col-2
             if col_widget[widget_index] == 'combobox':
-                self.filetable.setCellWidget(0,col,Qtw.QComboBox())
+                self.filetable.setCellWidget(0,col,QtWidgets.QComboBox())
 
     def reset_cols(self):
         self.filetable.setColumnCount(2)

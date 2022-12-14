@@ -1,46 +1,46 @@
-import PyQt5.QtWidgets as Qtw
+import PySide6.QtWidgets as QtWidgets
 from GUI.Widgets.Table_Widgets import FileTable
 from Processing.Photometry import TableUpdate as TUP
-from Processing.Behaviour import TableUpdate as TUB
+# from Processing.Behaviour import TableUpdate as TUB
 
-class FilePairTab(Qtw.QWidget):
+class FilePairTab(QtWidgets.QWidget):
 
     def __init__(self,*args,**kwargs):
         super(FilePairTab,self).__init__(*args, **kwargs)
 
-        self.vlayout = Qtw.QVBoxLayout(self)
-        self.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.MinimumExpanding)
+        self.vlayout = QtWidgets.QVBoxLayout(self)
+        self.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.MinimumExpanding)
 
-        self.buttonwid = Qtw.QWidget(self)
-        self.buttonhlayout = Qtw.QHBoxLayout(self.buttonwid)
-        self.buttonwid.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.Fixed)
+        self.buttonwid = QtWidgets.QWidget(self)
+        self.buttonhlayout = QtWidgets.QHBoxLayout(self.buttonwid)
+        self.buttonwid.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.Fixed)
 
-        self.typewid = Qtw.QWidget(self)
-        self.typehlayout = Qtw.QHBoxLayout(self.typewid)
-        self.typewid.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.Fixed)
+        self.typewid = QtWidgets.QWidget(self)
+        self.typehlayout = QtWidgets.QHBoxLayout(self.typewid)
+        self.typewid.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.Fixed)
 
-        self.table_button_wid = Qtw.QWidget(self)
-        self.table_button_layout = Qtw.QHBoxLayout(self.table_button_wid)
-        self.table_button_wid.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.Fixed)
+        self.table_button_wid = QtWidgets.QWidget(self)
+        self.table_button_layout = QtWidgets.QHBoxLayout(self.table_button_wid)
+        self.table_button_wid.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.Fixed)
 
         #Add Buttons
-        self.load_csv_button = Qtw.QPushButton('Load File',self.buttonwid)
+        self.load_csv_button = QtWidgets.QPushButton('Load File',self.buttonwid)
 
-        self.save_csv_button = Qtw.QPushButton('Save File',self.buttonwid)
+        self.save_csv_button = QtWidgets.QPushButton('Save File',self.buttonwid)
 
         self.buttonhlayout.addWidget(self.load_csv_button)
         self.buttonhlayout.addWidget(self.save_csv_button)
 
         #Add File Types
 
-        self.behav_label = Qtw.QLabel('Behavioural Data Type:',self.typewid)
+        self.behav_label = QtWidgets.QLabel('Behavioural Data Type:',self.typewid)
 
-        self.behav_combo = Qtw.QComboBox(self.typewid)
+        self.behav_combo = QtWidgets.QComboBox(self.typewid)
         self.behav_combo.addItems(['','ABET II Raw Data'])
 
-        self.neuraldata_label = Qtw.QLabel('Neural Data Type:',self.typewid)
+        self.neuraldata_label = QtWidgets.QLabel('Neural Data Type:',self.typewid)
 
-        self.neuraldata_combo = Qtw.QComboBox(self.typewid)
+        self.neuraldata_combo = QtWidgets.QComboBox(self.typewid)
         self.neuraldata_combo.addItems(['','Doric Photometry Data'])
         self.neuraldata_combo.currentIndexChanged.connect(self.neuraldata_combo_changed)
 
@@ -51,9 +51,9 @@ class FilePairTab(Qtw.QWidget):
 
         # Table Buttons
 
-        self.table_addrow_button = Qtw.QPushButton('Add Row',self.table_button_wid)
+        self.table_addrow_button = QtWidgets.QPushButton('Add Row',self.table_button_wid)
         self.table_addrow_button.clicked.connect(self.add_row)
-        self.table_removerow_button = Qtw.QPushButton('Remove Row',self.table_button_wid)
+        self.table_removerow_button = QtWidgets.QPushButton('Remove Row',self.table_button_wid)
         self.table_removerow_button.clicked.connect(self.remove_row)
         self.table_button_layout.addWidget(self.table_addrow_button)
         self.table_button_layout.addWidget(self.table_removerow_button)

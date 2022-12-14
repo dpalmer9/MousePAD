@@ -1,12 +1,12 @@
 # Imports
-import PyQt5.QtWidgets as Qtw
+import PySide6.QtWidgets as QtWidgets
 from GUI.Widgets.Table_Widgets import FileTable
 from GUI.Tabs.Window_Tabs import MainTab
 
 
 # Main GUI
 
-class MainWindow(Qtw.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -20,13 +20,13 @@ class MainWindow(Qtw.QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setWindowTitle(self.title)
         self.menu = self.menuBar()
-        self.filemenu = Qtw.QMenu('File',self)
+        self.filemenu = QtWidgets.QMenu('File',self)
         self.filemenu.addAction('Load Session')
         self.filemenu.addAction('Save Session')
         self.filemenu.addAction('Exit')
         self.menu.addMenu(self.filemenu)
         #self.filetable = FileTable(self)
-        #self.filetable.setSizePolicy(Qtw.QSizePolicy.MinimumExpanding,Qtw.QSizePolicy.Minimum)
+        #self.filetable.setSizePolicy(QTWidgets.QSizePolicy.MinimumExpanding,QTWidgets.QSizePolicy.Minimum)
         self.maintab = MainTab(self)
         self.setCentralWidget(self.maintab)
         self.show()
