@@ -9,3 +9,4 @@ def linear_lsr(fp_data):
 
 def delta_f(fp_data):
     fp_data['DeltaF'] = (fp_data['Active'] - fp_data['Isobestic']) / fp_data['Isobestic']
+    return fp_data
