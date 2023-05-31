@@ -36,6 +36,8 @@ def extract_data(doric_data, iso, act, ttl):
     else:
         ttl_data = doric_data[ttl]
 
-    session_data = pd.concat([time_data, iso_data, act_data, ttl_data])
-    session_data.columns = ['Time', 'Isobestic', 'Active', 'TTL']
-    return session_data
+    signal_data = pd.concat([time_data, iso_data, act_data])
+    signal_data.columns = ['Time', 'Isobestic', 'Active']
+    ttl_data = pd.concat([time_data, ttl_data])
+    ttl_data.columns = ['Time','TTL']
+    return signal_data, ttl_data
